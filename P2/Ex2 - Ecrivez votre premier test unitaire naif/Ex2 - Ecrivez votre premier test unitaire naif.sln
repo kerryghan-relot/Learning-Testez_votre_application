@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex2 - Ecrivez votre premier test unitaire naif", "Ex2 - Ecrivez votre premier test unitaire naif.csproj", "{DC781154-2872-401C-B54C-9612F69CF4B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC781154-2872-401C-B54C-9612F69CF4B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC781154-2872-401C-B54C-9612F69CF4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC781154-2872-401C-B54C-9612F69CF4B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC781154-2872-401C-B54C-9612F69CF4B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9342DDEC-7F80-43B3-B3B5-5B4C4AC238F8}
+	EndGlobalSection
+EndGlobal
