@@ -4,6 +4,7 @@ TestComptageMots(2, "mot", 1);
 TestComptageMots(3, "Deux mots", 2);
 TestComptageMots(4, "Des Mots  avec des  espaces en trop  ", 7);
 TestComptageMots(5, null, -1);
+TestComptageMots(6, "Une phrase avec des accents où çà", 7);
 
 int CompteMots(string? phrase)
 {
