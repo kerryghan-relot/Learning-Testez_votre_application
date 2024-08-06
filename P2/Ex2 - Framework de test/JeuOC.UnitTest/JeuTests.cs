@@ -1,8 +1,18 @@
 using JeuOC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAssertions;
+using FluentAssertions.Extensions;
 
 namespace JeuOC.UnitTest
 {
+    /// <summary>
+    /// Class de test pour la classe Jeu
+    /// </summary>
+    /// <remarks>
+    /// Les trois première methodes font basiquement la même chose à quelques valeurs près.
+    /// Ainsi pour illustrer la différences entre une implémentation naïve, une avec Assert utilisé correctement et une avec le package NuGet FluentAssertion,
+    /// j'ai utilisé chacun d'eux pour ces trois fonctions de test.
+    /// </remarks>
     [TestClass]
     public class JeuTests
     {
@@ -18,9 +28,9 @@ namespace JeuOC.UnitTest
             // Act
             var resultat = jeu.Tour(6, 1);
 
-            // Assert
+            // Assert (using naive assertions)
             if (resultat != Resultat.Gagne)
-                Assert.Fail();
+                Assert.Fail("Le Heros devrait gagner!");
             if (jeu.Heros.Points != 1)
                 Assert.Fail();
             if (jeu.Heros.PointDeVies != 15)
@@ -39,13 +49,10 @@ namespace JeuOC.UnitTest
             // Act
             var resultat = jeu.Tour(5, 5);
 
-            // Assert
-            if (resultat != Resultat.Gagne)
-                Assert.Fail();
-            if (jeu.Heros.Points != 1)
-                Assert.Fail();
-            if (jeu.Heros.PointDeVies != 15)
-                Assert.Fail();
+            // Assert (using built-in assertions)
+            Assert.AreEqual(resultat, Resultat.Gagne, "Le Heros devrait gagner!");
+            Assert.AreEqual(jeu.Heros.Points, 1);
+            Assert.AreEqual(jeu.Heros.PointDeVies, 15);
         }
 
         [TestMethod]
@@ -60,13 +67,55 @@ namespace JeuOC.UnitTest
             // Act
             var resultat = jeu.Tour(2, 4);
 
-            // Assert
-            if (resultat != Resultat.Perdu)
-                Assert.Fail();
-            if (jeu.Heros.Points != 0)
-                Assert.Fail();
-            if (jeu.Heros.PointDeVies != 13)
-                Assert.Fail();
+            // Assert (using FluentAssertions)
+            resultat.Should().Be(Resultat.Perdu, "Le Heros devrait perdre!");
+            jeu.Heros.Points.Should().Be(0);
+            jeu.Heros.PointDeVies.Should().Be(13);
+        }
+
+        [TestMethod]
+        public void Learning_BuiltInAssertions()
+        {
+            Assert.AreEqual(1, 1); // égalité entre entier
+            Assert.AreEqual(3.14, 6.28 / 2); // égalité entre double
+            Assert.AreEqual("une chaine", "une " + "chaine"); // égalité entre chaînes
+            Assert.AreNotEqual(1, 2); // inégalité
+            Assert.IsFalse(1 == 2); // booléen vaut faux
+            Assert.IsTrue(1 <= 2); // booléen vaut vrai
+            Jeu jeu1 = new();
+            Jeu jeu2 = jeu1;
+            Assert.AreSame(jeu1, jeu2); // les références de l'objet sont identiques
+            jeu2 = new();
+            Assert.AreNotSame(jeu1, jeu2); // les références ne sont pas identiques
+            Assert.IsInstanceOfType(jeu1, typeof(Jeu)); // comparaison de type
+            Assert.IsNotInstanceOfType(jeu1, typeof(De)); // différence de type
+            Assert.IsNotNull(jeu1); // différence à null
+            int? uneValeurNulle = null;
+            Assert.IsNull(uneValeurNulle); // comparaison à null
+        }
+
+        [TestMethod]
+        public void Learning_FluentAssertions()
+        {
+            var valeur = -1;
+            valeur.Should().BeNegative();
+            1.Should().BeGreaterThan(valeur);
+            valeur.Should().BeLessThanOrEqualTo(1);
+            Math.PI.Should().BeApproximately(3.14, 0.1);
+            valeur.Should().BeInRange(-5, 5);
+            "chaine".Should().Contain("i").And.Contain("e").And.NotStartWith("p");
+            Jeu jeu = new();
+            jeu.Should().BeOfType<Jeu>().Which.Heros.PointDeVies.Should().Be(15);
+            jeu.Should().NotBeOfType<int>().And.NotBeNull();
+            2.Should().BeOneOf([1, 2, 3]);
+            string email = "nico@openclassrooms.com";
+            email.Should().Match("*@*.com");
+            DateTime.Now.Should().BeAfter(new DateTime(2000, 1, 1));
+            var dateDeLivraison = DateTime.Now.AddDays(3);
+            DateTime.Now.Should().BeAtLeast(2.Days()).Before(dateDeLivraison);
+            // And many more...
+            // See documention for more information:
+            // https://fluentassertions.com/introduction
         }
     }
 }
