@@ -2,19 +2,21 @@
 {
     public class Jeu
     {
+        private readonly IFournisseurMeteo _fournisseurMeteo;
         public Heros Heros { get; }
 
-        public Jeu()
+        public Jeu(FournisseurMeteo fournisseurMeteo)
         {
             Heros = new Heros(15);
+            _fournisseurMeteo = fournisseurMeteo;
         }
 
         public Resultat Tour(int deHeros, int deMonstre)
         {
             if (deHeros < 1 || deHeros > 6)
-                throw new ArgumentOutOfRangeException("deHeros doit être compris entre 1 et 6 inclu.");
+                throw new ArgumentOutOfRangeException(nameof(deHeros), "deHeros doit être compris entre 1 et 6 inclu.");
             if (deMonstre < 1 || deMonstre > 6)
-                throw new ArgumentOutOfRangeException("deMonstre doit être compris entre 1 et 6 inclu.");
+                throw new ArgumentOutOfRangeException(nameof(deMonstre), "deMonstre doit être compris entre 1 et 6 inclu.");
 
             if (GagneLeCombat(deHeros, deMonstre))
             {

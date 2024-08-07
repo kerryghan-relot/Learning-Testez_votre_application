@@ -25,7 +25,7 @@ namespace JeuOC.UnitTest
         public void Tour_DeHeroSuperieurDeMonstre_GagneAvecUnPointSansPerdreDePointDeVie()
         {
             // Arrange
-            Jeu jeu = new();
+            Jeu jeu = new Jeu(new FournisseurMeteo());
 
             // Act
             var resultat = jeu.Tour(6, 1);
@@ -46,7 +46,7 @@ namespace JeuOC.UnitTest
         public void Tour_DeHeroEgalDeMonstre_GagneAvecUnPointSansPerdreDePointDeVie()
         {
             // Arrange
-            Jeu jeu = new();
+            Jeu jeu = new Jeu(new FournisseurMeteo());
 
             // Act
             var resultat = jeu.Tour(5, 5);
@@ -64,7 +64,7 @@ namespace JeuOC.UnitTest
         public void Tour_DeHeroInferieurDeMonstre_PerdAvecZeroPointEnPerdantDesPointDeVie()
         {
             // Arrange
-            Jeu jeu = new();
+            Jeu jeu = new Jeu(new FournisseurMeteo());
 
             // Act
             var resultat = jeu.Tour(2, 4);
@@ -84,10 +84,10 @@ namespace JeuOC.UnitTest
             Assert.AreNotEqual(1, 2); // inégalité
             Assert.IsFalse(1 == 2); // booléen vaut faux
             Assert.IsTrue(1 <= 2); // booléen vaut vrai
-            Jeu jeu1 = new();
+            Jeu jeu1 = new Jeu(new FournisseurMeteo());
             Jeu jeu2 = jeu1;
             Assert.AreSame(jeu1, jeu2); // les références de l'objet sont identiques
-            jeu2 = new();
+            jeu2 = new Jeu(new FournisseurMeteo());
             Assert.AreNotSame(jeu1, jeu2); // les références ne sont pas identiques
             Assert.IsInstanceOfType(jeu1, typeof(Jeu)); // comparaison de type
             Assert.IsNotInstanceOfType(jeu1, typeof(De)); // différence de type
@@ -106,7 +106,7 @@ namespace JeuOC.UnitTest
             Math.PI.Should().BeApproximately(3.14, 0.1);
             valeur.Should().BeInRange(-5, 5);
             "chaine".Should().Contain("i").And.Contain("e").And.NotStartWith("p");
-            Jeu jeu = new();
+            Jeu jeu = new Jeu(new FournisseurMeteo());
             jeu.Should().BeOfType<Jeu>().Which.Heros.PointDeVies.Should().Be(15);
             jeu.Should().NotBeOfType<int>().And.NotBeNull();
             2.Should().BeOneOf([1, 2, 3]);
@@ -183,7 +183,7 @@ namespace JeuOC.UnitTest
             this.Invoking(t => DummyFunctionThatThowAnException()).Should().Throw<DivideByZeroException>();
 
             // But the true power of invoking comes when you are testing objects and their methods
-            new Jeu().Invoking(j => j.Tour(0, 5)).Should().Throw<ArgumentOutOfRangeException>();
+            new Jeu(new FournisseurMeteo()).Invoking(j => j.Tour(0, 5)).Should().Throw<ArgumentOutOfRangeException>();
 
         }
 
@@ -193,7 +193,7 @@ namespace JeuOC.UnitTest
         {
             // However, we can achieve the same thing using Built-In Attributes
             // And for now, I do think that it is more natural than the equivalent with FluentAssertion above.
-            Jeu j = new();
+            Jeu j = new Jeu(new FournisseurMeteo());
             Resultat resultat1 = j.Tour(0, 5);
             Resultat resultat2 = j.Tour(4, -1);
             Resultat resultat3 = j.Tour(7, -3);

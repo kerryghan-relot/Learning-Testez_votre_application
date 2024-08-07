@@ -2,9 +2,9 @@
 
 namespace JeuOC
 {
-    public class De
+    public class De : ILanceurDeDe
     {
-        private Random random;
+        private readonly Random random;
 
         public De()
         {
