@@ -2,14 +2,15 @@
 
 namespace JeuOC
 {
-    public class Ihm(IConsole console, ILanceurDeDe de)
+    public class Ihm(IConsole console, ILanceurDeDe de, IFournisseurMeteo meteo)
     {
         private readonly IConsole _console = console;
         private readonly ILanceurDeDe _de = de;
+        private readonly IFournisseurMeteo _meteo = meteo;
 
         public void Demarre()
         {
-            var jeu = new Jeu(new FournisseurMeteo());
+            var jeu = new Jeu(_meteo);
             _console.WriteLine($"A l'attaque : points/vie {jeu.Heros.Points}/{jeu.Heros.PointDeVies}");
             while (jeu.Heros.PointDeVies > 0)
             {

@@ -5,7 +5,7 @@
         private readonly IFournisseurMeteo _fournisseurMeteo;
         public Heros Heros { get; }
 
-        public Jeu(FournisseurMeteo fournisseurMeteo)
+        public Jeu(IFournisseurMeteo fournisseurMeteo)
         {
             Heros = new Heros(15);
             _fournisseurMeteo = fournisseurMeteo;
@@ -25,7 +25,10 @@
             }
             else
             {
-                Heros.PerdsUnCombat(deMonstre - deHeros);
+                if (_fournisseurMeteo.GetWeather() == Meteo.Tempete)
+                    Heros.PerdsUnCombat(2 * (deMonstre - deHeros));
+                else
+                    Heros.PerdsUnCombat(deMonstre - deHeros);
                 return Resultat.Perdu;
             }
         }
