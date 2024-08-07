@@ -11,6 +11,11 @@
 
         public Resultat Tour(int deHeros, int deMonstre)
         {
+            if (deHeros < 1 || deHeros > 6)
+                throw new ArgumentOutOfRangeException("deHeros doit être compris entre 1 et 6 inclu.");
+            if (deMonstre < 1 || deMonstre > 6)
+                throw new ArgumentOutOfRangeException("deMonstre doit être compris entre 1 et 6 inclu.");
+
             if (GagneLeCombat(deHeros, deMonstre))
             {
                 Heros.GagneUnCombat();

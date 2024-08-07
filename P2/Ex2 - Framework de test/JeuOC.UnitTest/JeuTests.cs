@@ -2,6 +2,8 @@ using JeuOC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
 using FluentAssertions.Extensions;
+using static System.Net.Mime.MediaTypeNames;
+using System.Security.Cryptography.X509Certificates;
 
 namespace JeuOC.UnitTest
 {
@@ -116,6 +118,85 @@ namespace JeuOC.UnitTest
             // And many more...
             // See documention for more information:
             // https://fluentassertions.com/introduction
+        }
+
+        [TestMethod]
+        public void Learning_ManageExceptionNaiveWay()
+        {
+            int entier = 0;
+            int autreEntier = 5;
+
+            try
+            {
+                int division = autreEntier / entier;
+                Assert.Fail("The previous operation should throw an exception");  // This is to ensure that in the event where the previous assignement would
+                                                                                  // not throw an exception, we on purpose fail the current test because it should.
+            }
+            catch (DivideByZeroException ex)
+            {
+                ex.Message.Should().NotBeNullOrEmpty();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException), "The previous operation should throw an exception")]
+        public void Learning_ManageExceptionWithBuiltInAttributes()
+        {
+            int entier = 0;
+            int autreEntier = 5;
+            int division = autreEntier / entier;
+        }
+
+        [TestMethod]
+        public void Learning_ManageExceptionWithFluentAssertionUsingAction()
+        {
+            int entier = 0;
+            int autreEntier = 5;
+
+            // We could use actions that should throw excptions
+            Action division1 = () => { int resultat = autreEntier / entier; };
+            division1.Should().Throw<DivideByZeroException>();
+
+            int DummyFunctionThatThowAnException()
+            {
+                int entier = 0;
+                int autreEntier = 5;
+                return autreEntier / entier;
+            }
+
+            // The same thing can be done with a function call in the Action.
+            Action division2 = () => DummyFunctionThatThowAnException();
+            division2.Should().Throw<DivideByZeroException>();
+        }
+
+        [TestMethod]
+        public void Learning_ManageExceptionWithFluentAssertionUsingInvoking()
+        {
+            int DummyFunctionThatThowAnException()
+            {
+                int entier = 0;
+                int autreEntier = 5;
+                return autreEntier / entier;
+            }
+
+            // Or also using Invoking()
+            this.Invoking(t => DummyFunctionThatThowAnException()).Should().Throw<DivideByZeroException>();
+
+            // But the true power of invoking comes when you are testing objects and their methods
+            new Jeu().Invoking(j => j.Tour(0, 5)).Should().Throw<ArgumentOutOfRangeException>();
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Learning_ManageExceptionWithBuiltInAttributeOnClassesAndMethods()
+        {
+            // However, we can achieve the same thing using Built-In Attributes
+            // And for now, I do think that it is more natural than the equivalent with FluentAssertion above.
+            Jeu j = new();
+            Resultat resultat1 = j.Tour(0, 5);
+            Resultat resultat2 = j.Tour(4, -1);
+            Resultat resultat3 = j.Tour(7, -3);
         }
     }
 }
