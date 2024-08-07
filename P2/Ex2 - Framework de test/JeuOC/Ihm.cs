@@ -9,7 +9,7 @@ namespace JeuOC
 
         public void Demarre()
         {
-            var jeu = new Jeu();
+            var jeu = new Jeu(new FournisseurMeteo());
             _console.WriteLine($"A l'attaque : points/vie {jeu.Heros.Points}/{jeu.Heros.PointDeVies}");
             while (jeu.Heros.PointDeVies > 0)
             {
