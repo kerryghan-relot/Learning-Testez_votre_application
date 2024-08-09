@@ -16,5 +16,10 @@
 
             PointDeVie -= nb + 1;
         }
+
+        public bool IsAlive()
+        {
+            return PointDeVie > 0;
+        }
     }
 }

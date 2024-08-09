@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 
 namespace JeuOC.UnitTest
 {
