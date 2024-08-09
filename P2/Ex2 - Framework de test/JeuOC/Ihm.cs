@@ -12,7 +12,7 @@
         {
             var jeu = new Jeu(_meteo, _healthGen, _randomGenerator);
             _console.WriteLine($"A l'attaque : points/vie {jeu.Heros.Points}/{jeu.Heros.PointDeVies}");
-            while (jeu.NumberOfMonstersToDefeat > 0 && jeu.Heros.PointDeVies > 0)
+            while (jeu.EnCour())
             {
                 var resultat = jeu.Tour(_de.Lance(), _de.Lance());
                 switch (resultat)

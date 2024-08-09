@@ -1,4 +1,6 @@
-﻿namespace JeuOC
+﻿using System.Numerics;
+
+namespace JeuOC
 {
     public class Jeu
     {
@@ -53,6 +55,21 @@
         private static bool GagneLeCombat(int de1, int de2)
         {
             return de1 >= de2;
+        }
+
+        public bool EnCour()
+        {
+            return NumberOfMonstersToDefeat > 0 && Heros.PointDeVies > 0;
+        }
+
+        public bool GameOver()
+        {
+            return Heros.PointDeVies <= 0;
+        }
+
+        public bool GameWon()
+        {
+            return NumberOfMonstersToDefeat <= 0 && Heros.PointDeVies > 0;
         }
     }
 }

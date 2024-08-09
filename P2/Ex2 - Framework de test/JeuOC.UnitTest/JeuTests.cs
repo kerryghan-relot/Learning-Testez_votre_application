@@ -190,6 +190,48 @@ namespace JeuOC.UnitTest
             jeu.Monstre.PointDeVie.Should().Be(-5);
         }
 
+        // Pour les états du jeu on pourrait d'avantage tester (par exemple lorsque le heros bat un ou plusieurs monstres, après les avoir tous batus, etc...)
+        // Mais ces fonctions étant assez simple et n'ayant pas trop envie de m'embeter avec des tests redondants on va en rester la.
+        public void EnCour_QuandLeJeuVientJusteDeDémarrer()
+        {
+            // Peu importe l'état du jeu (météo, nombre et santé des monstres) le jeu doit toujours être dans l'état en cours quand il démarre
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+
+            jeu.EnCour().Should().BeTrue();
+        }
+
+        public void GameOver_QuandLeJeuVientJusteDeDémarrer()
+        {
+            // Peu importe l'état du jeu (météo, nombre et santé des monstres) le jeu ne doit jamais être dans m'état game over quand il démarre
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+
+            jeu.GameOver().Should().BeFalse();
+        }
+
+        public void GameWon_QuandLeJeuVientJusteDeDémarrer()
+        {
+            // Peu importe l'état du jeu (météo, nombre et santé des monstres) le jeu ne doit jamais être dans m'état HerosWins quand il démarre
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+
+            jeu.GameWon().Should().BeFalse();
+        }
+
+        public void JeuHerosPointDeVie_QuandLeJeuVientJusteDeDémarrer()
+        {
+            // Peu importe l'état du jeu (météo, nombre et santé des monstres) le heros démarre toujours le jeu full vie
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+
+            jeu.Heros.PointDeVies.Should().Be(15);
+        }
+
+        public void JeuHerosPoints_QuandLeJeuVientJusteDeDémarrer()
+        {
+            // Peu importe l'état du jeu (météo, nombre et santé des monstres) le heros démarre toujours le jeu avec 0 point
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+
+            jeu.Heros.Points.Should().Be(0);
+        }
+
         [TestMethod]
         public void Learning_BuiltInAssertions()
         {
