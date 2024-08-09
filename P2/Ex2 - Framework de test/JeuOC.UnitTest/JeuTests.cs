@@ -19,12 +19,16 @@ namespace JeuOC.UnitTest
         [Description("Etant donné un tour de jeu, " +
                      "lorsque j'ai un lancer supérieur au second et que la météo est soleil, " +
                      "alors le résultat est gagné avec un point sans perdre de points de vie")]
-        public void Tour_DeHeroSuperieurDeMonstre_AvecSoleil_GagneAvecUnPointSansPerdreDePointDeVie()
+        public void Tour_DeHeroSuperieurDeMonstre_AvecSoleil_AvecMonstreFacileInfini_GagneAvecUnPointSansPerdreDePointDeVie()
         {
             // Arrange
             var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Soleil);
-            Jeu jeu = new Jeu(fournisseurMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            var fauxNumberGenerator = Mock.Of<IRandomGenerator>();
+            Mock.Get(fauxNumberGenerator).Setup(n => n.Generate(It.IsAny<int>(), It.IsAny<int>())).Returns(999);  // Run the game as long as the Heros lives
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, fauxNumberGenerator);
 
             // Act
             var resultat = jeu.Tour(6, 1);
@@ -42,12 +46,15 @@ namespace JeuOC.UnitTest
         [Description("Etant donné un tour de jeu, " +
                      "lorsque j'ai un lancer supérieur au second et que la météo est tempete, " +
                      "alors le résultat est gagné avec un point sans perdre de points de vie")]
-        public void Tour_DeHeroSuperieurDeMonstre_AvecTempete_GagneAvecUnPointSansPerdreDePointDeVie()
+        public void Tour_DeHeroSuperieurDeMonstre_AvecTempete_AvecMonstreFacileInfini_GagneAvecUnPointSansPerdreDePointDeVie()
         {
             // Arrange
             var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Tempete);
-            Jeu jeu = new Jeu(fournisseurMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, new RandomGenerator());
+            // As we are only emulating a single turn, we donc care about the number of monsters generated.
 
             // Act
             var resultat = jeu.Tour(6, 1);
@@ -65,12 +72,15 @@ namespace JeuOC.UnitTest
         [Description("Etant donné un tour de jeu, " +
                      "lorsque j'ai un lancer égal au second et que la météo est soleil, " +
                      "alors le résultat est gagné avec un point sans perdre de points de vie")]
-        public void Tour_DeHeroEgalDeMonstre_AvecSoleil_GagneAvecUnPointSansPerdreDePointDeVie()
+        public void Tour_DeHeroEgalDeMonstre_AvecSoleil_AvecMonstreFacileInfini_GagneAvecUnPointSansPerdreDePointDeVie()
         {
             // Arrange
             var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Soleil);
-            Jeu jeu = new Jeu(fournisseurMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, new RandomGenerator());
+            // As we are only emulating a single turn, we donc care about the number of monsters generated.
 
             // Act
             var resultat = jeu.Tour(5, 5);
@@ -85,12 +95,15 @@ namespace JeuOC.UnitTest
         [Description("Etant donné un tour de jeu, " +
                      "lorsque j'ai un lancer inférieur au second et que la météo est soleil, " +
                      "alors le résultat est perdu avec des point de points de vie en moins")]
-        public void Tour_DeHeroInferieurDeMonstre_AvecSoleil_PerdAvecZeroPointEnPerdantDesPointDeVie()
+        public void Tour_DeHeroInferieurDeMonstre_AvecSoleil_AvecMonstreFacileInfini_PerdAvecZeroPointEnPerdantDesPointDeVie()
         {
             // Arrange
             var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Soleil);
-            Jeu jeu = new Jeu(fournisseurMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, new RandomGenerator());
+            // As we are only emulating a single turn, we donc care about the number of monsters generated.
 
             // Act
             var resultat = jeu.Tour(2, 4);
@@ -105,12 +118,15 @@ namespace JeuOC.UnitTest
         [Description("Etant donné un tour de jeu, " +
                      "lorsque j'ai un lancer inférieur au second et que la météo est tempete, " +
                      "alors le résultat est perdu avec des point de points de vie en moins")]
-        public void Tour_DeHeroInferieurDeMonstre_AvecTempete_PerdAvecZeroPointEnPerdantDesPointDeVie()
+        public void Tour_DeHeroInferieurDeMonstre_AvecTempete_AvecMonstreFacileInfini_PerdAvecZeroPointEnPerdantDesPointDeVie()
         {
             // Arrange
             var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Tempete);
-            Jeu jeu = new Jeu(fournisseurMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, new RandomGenerator());
+            // As we are only emulating a single turn, we donc care about the number of monsters generated.
 
             // Act
             var resultat = jeu.Tour(2, 4);
@@ -122,6 +138,59 @@ namespace JeuOC.UnitTest
         }
 
         [TestMethod]
+        [Description("Etant donné un tour de jeu, " +
+                     "lorsque la météo est tempête et que le monstre a 4PV, " +
+                     "on fait 5 tour de jeu avec 3 victoires pour 2 défaites pour le Heros.")]
+        public void Tour_DeHeroInferieurDeMonstre_AvecTempete_AvecMonstre4HP_MonstrePerdAuBoutDeCinqLances()
+        {
+            var fournisseurMeteo = Mock.Of<IFournisseurMeteo>();
+            Mock.Get(fournisseurMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Tempete);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(4);
+            Jeu jeu = new Jeu(fournisseurMeteo, fauxHealthGen, new RandomGenerator());
+            // As we are only emulating a single turn, we donc care about the number of monsters generated.
+
+            jeu.Heros.PointDeVies.Should().Be(15);
+            jeu.Heros.Points.Should().Be(0);
+            jeu.Monstre.PointDeVie.Should().Be(4);
+
+            var resultat = jeu.Tour(2, 4);
+
+            resultat.Should().Be(Resultat.Perdu, "Le Heros devrait perdre!");
+            jeu.Heros.PointDeVies.Should().Be(11);
+            jeu.Heros.Points.Should().Be(0);
+            jeu.Monstre.PointDeVie.Should().Be(4);
+
+            resultat = jeu.Tour(5, 5);
+
+            resultat.Should().Be(Resultat.Gagne, "Le Heros devrait gagner!");
+            jeu.Heros.PointDeVies.Should().Be(11);
+            jeu.Heros.Points.Should().Be(1);
+            jeu.Monstre.PointDeVie.Should().Be(3);
+
+            resultat = jeu.Tour(6, 5);
+
+            resultat.Should().Be(Resultat.Gagne, "Le Heros devrait gagner!");
+            jeu.Heros.PointDeVies.Should().Be(11);
+            jeu.Heros.Points.Should().Be(2);
+            jeu.Monstre.PointDeVie.Should().Be(1);
+
+            resultat = jeu.Tour(1, 4);
+
+            resultat.Should().Be(Resultat.Perdu, "Le Heros devrait perdre!");
+            jeu.Heros.PointDeVies.Should().Be(5);
+            jeu.Heros.Points.Should().Be(2);
+            jeu.Monstre.PointDeVie.Should().Be(1);
+
+            resultat = jeu.Tour(6, 1);
+
+            resultat.Should().Be(Resultat.Gagne, "Le Heros devrait gagner!");
+            jeu.Heros.PointDeVies.Should().Be(5);
+            jeu.Heros.Points.Should().Be(3);
+            jeu.Monstre.PointDeVie.Should().Be(-5);
+        }
+
+        [TestMethod]
         public void Learning_BuiltInAssertions()
         {
             Assert.AreEqual(1, 1); // égalité entre entier
@@ -130,10 +199,10 @@ namespace JeuOC.UnitTest
             Assert.AreNotEqual(1, 2); // inégalité
             Assert.IsFalse(1 == 2); // booléen vaut faux
             Assert.IsTrue(1 <= 2); // booléen vaut vrai
-            Jeu jeu1 = new Jeu(new FournisseurMeteo()); // Ici le test ne se fait pas sur le comportement de la classe mais simplement sur son type, donc je n'ai pas besoin de créer de simulacre.
-            Jeu jeu2 = jeu1;
+            Jeu jeu1 = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator()); 
+            Jeu jeu2 = jeu1; // Ici le test ne se fait pas sur le comportement de la classe mais simplement sur son type, donc je n'ai pas besoin de créer de simulacre.
             Assert.AreSame(jeu1, jeu2); // les références de l'objet sont identiques
-            jeu2 = new Jeu(new FournisseurMeteo());
+            jeu2 = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
             Assert.AreNotSame(jeu1, jeu2); // les références ne sont pas identiques
             Assert.IsInstanceOfType(jeu1, typeof(Jeu)); // comparaison de type
             Assert.IsNotInstanceOfType(jeu1, typeof(De)); // différence de type
@@ -152,7 +221,7 @@ namespace JeuOC.UnitTest
             Math.PI.Should().BeApproximately(3.14, 0.1);
             valeur.Should().BeInRange(-5, 5);
             "chaine".Should().Contain("i").And.Contain("e").And.NotStartWith("p");
-            Jeu jeu = new Jeu(new FournisseurMeteo()); // Ici le test ne se fait pas sur le comportement de la classe mais simplement sur son type, donc je n'ai pas besoin de créer de simulacre.
+            Jeu jeu = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator()); // Ici le test ne se fait pas sur le comportement de la classe mais simplement sur son type, donc je n'ai pas besoin de créer de simulacre.
             jeu.Should().BeOfType<Jeu>().Which.Heros.PointDeVies.Should().Be(15);
             jeu.Should().NotBeOfType<int>().And.NotBeNull();
             2.Should().BeOneOf([1, 2, 3]);
@@ -190,7 +259,7 @@ namespace JeuOC.UnitTest
         {
             int entier = 0;
             int autreEntier = 5;
-            int division = autreEntier / entier;
+            _ = autreEntier / entier;
         }
 
         [TestMethod]
@@ -203,7 +272,7 @@ namespace JeuOC.UnitTest
             Action division1 = () => { int resultat = autreEntier / entier; };
             division1.Should().Throw<DivideByZeroException>();
 
-            int DummyFunctionThatThowAnException()
+            static int DummyFunctionThatThowAnException()
             {
                 int entier = 0;
                 int autreEntier = 5;
@@ -218,7 +287,7 @@ namespace JeuOC.UnitTest
         [TestMethod]
         public void Learning_ManageExceptionWithFluentAssertionUsingInvoking()
         {
-            int DummyFunctionThatThowAnException()
+            static int DummyFunctionThatThowAnException()
             {
                 int entier = 0;
                 int autreEntier = 5;
@@ -230,7 +299,7 @@ namespace JeuOC.UnitTest
 
             // But the true power of invoking comes when you are testing objects and their methods
             // Ici peut importe la météo, les dés n'étant pas entre 1 et 6, on devrait toujours avoir une exception quelque soit la météo.
-            new Jeu(new FournisseurMeteo()).Invoking(j => j.Tour(0, 5)).Should().Throw<ArgumentOutOfRangeException>();
+            new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator()).Invoking(j => j.Tour(0, 5)).Should().Throw<ArgumentOutOfRangeException>();
 
         }
 
@@ -241,10 +310,10 @@ namespace JeuOC.UnitTest
             // However, we can achieve the same thing using Built-In Attributes
             // And for now, I do think that it is more natural than the equivalent with FluentAssertion above.
             // Same here about the weather.
-            Jeu j = new Jeu(new FournisseurMeteo());
-            Resultat resultat1 = j.Tour(0, 5);
-            Resultat resultat2 = j.Tour(4, -1);
-            Resultat resultat3 = j.Tour(7, -3);
+            Jeu j = new Jeu(new FournisseurMeteo(), new MonsterHealthGenerator(), new RandomGenerator());
+            _ = j.Tour(0, 5);
+            _ = j.Tour(4, -1);
+            _ = j.Tour(7, -3);
         }
     }
 }

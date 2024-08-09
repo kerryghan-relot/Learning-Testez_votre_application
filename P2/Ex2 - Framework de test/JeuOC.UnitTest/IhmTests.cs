@@ -7,10 +7,11 @@ namespace JeuOC.UnitTest
     public class IhmTests
     {
         [TestMethod]
-        public void Ihm_AvecUnJeuDeDePredefini_EtMeteoSoleil_LeJoueurGagne()
+        public void Ihm_AvecUnJeuDeDePredefini_EtMeteoSoleil_EtMonstreFacileInfinis_LeJoueurGagne()
         {
             // arrange
             var fausseConsole = new FausseConsole();
+
             var fauxDe = Mock.Of<ILanceurDeDe>();
             var sequence = Mock.Get(fauxDe).SetupSequence(d => d.Lance());
             List<int> jetDeDe = [4, 5, 1, 1, 4, 3, 5, 6, 6, 6, 1, 2, 4, 2, 3, 2, 6, 4, 5, 1, 1, 4, 3, 5, 6, 6, 6, 1, 2, 4, 2, 3, 2, 6];
@@ -18,9 +19,18 @@ namespace JeuOC.UnitTest
             {
                 sequence.Returns(lancer);
             }
+
+
             var fausseMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fausseMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Soleil);
-            Ihm ihm = new(fausseConsole, fauxDe, fausseMeteo);
+
+            // Generate a mock for the Health Generator and Number Generator.
+            // That way, the original test will remained unchanged
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            var fauxNumberGenerator = Mock.Of<IRandomGenerator>();
+            Mock.Get(fauxNumberGenerator).Setup(n => n.Generate(1, 20)).Returns(999);
+            Ihm ihm = new(fausseConsole, fauxDe, fausseMeteo, fauxHealthGen, fauxNumberGenerator);
 
             // act
             ihm.Demarre();
@@ -32,7 +42,7 @@ namespace JeuOC.UnitTest
             resultat.Should().HaveLength(560);
         }
         [TestMethod]
-        public void Ihm_AvecUnJeuDeDePredefini_EtMeteoTempete_LeJoueurGagne()
+        public void Ihm_AvecUnJeuDeDePredefini_EtMeteoTempete_EtMonstreFacileInfini_LeJoueurGagne()
         {
             /// Ici la fonction aura les même lancer de dés.
             /// Les seuls différences qu'il y a sont :
@@ -45,7 +55,11 @@ namespace JeuOC.UnitTest
             var fauxDe = new FauxDe();
             var fausseMeteo = Mock.Of<IFournisseurMeteo>();
             Mock.Get(fausseMeteo).Setup(m => m.GetWeather()).Returns(Meteo.Tempete);
-            Ihm ihm = new(fausseConsole, fauxDe, fausseMeteo);
+            var fauxHealthGen = Mock.Of<IMonsterHealthGenerator>();
+            Mock.Get(fauxHealthGen).Setup(h => h.Generate()).Returns(1);
+            var fauxNumberGenerator = Mock.Of<IRandomGenerator>();
+            Mock.Get(fauxNumberGenerator).Setup(n => n.Generate(1, 20)).Returns(999);
+            Ihm ihm = new(fausseConsole, fauxDe, fausseMeteo, fauxHealthGen, fauxNumberGenerator);
 
             // act
             ihm.Demarre();

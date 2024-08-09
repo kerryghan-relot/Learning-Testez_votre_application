@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace JeuOC
+﻿namespace JeuOC
 {
     public class De : ILanceurDeDe
     {
